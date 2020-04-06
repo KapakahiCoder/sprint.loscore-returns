@@ -10,7 +10,7 @@ class LoScore {
   * */
 
   uniq(array) {
-    let result = [];
+    const result = [];
     let test = false;
     for (let i = 0; i < array.length; i++) {
       for (let j = 0; j < result.length; j++) {
@@ -44,7 +44,7 @@ class LoScore {
   }
 
   map(collection, iteratee) {
-    let result = [];
+    const result = [];
     this.each(collection, (val) => result.push(iteratee(val)));
     return result;
   }
@@ -56,7 +56,7 @@ class LoScore {
   }
 
   reject(collection, test) {
-    let result = [];
+    const result = [];
     this.filter(collection, (val) => {
       if (!test(val)) {
         result.push(val);
@@ -86,7 +86,8 @@ class LoScore {
       (acc, val) => {
         if (!acc) {
           return false;
-        } else return iterator(val);
+        }
+        return iterator(val);
       },
       true
     );
@@ -97,7 +98,7 @@ class LoScore {
   |~~~~~~~~~~
   * */
   extend(objA, ...objB) {
-    for (let item of objB) {
+    for (const item of objB) {
       this.each(item, (val, key) => {
         objA[key] = val;
       });
@@ -123,20 +124,19 @@ class LoScore {
   }
 
   memoize(func) {
-    let cache = {};
+    const cache = {};
     return function(...args) {
       if (cache[args]) {
         return cache[args];
-      } else {
-        let val = func(args);
-        cache[args] = val;
-        return val;
       }
+      const val = func(args);
+      cache[args] = val;
+      return val;
     };
   }
 
   invoke(collection, functionOrKey) {
-    let result = [];
+    const result = [];
     if (typeof functionOrKey !== "function") {
       this.each(collection, (val, index) => {
         result.push(collection[index][functionOrKey].apply(val));
