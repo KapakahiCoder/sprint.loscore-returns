@@ -8,8 +8,22 @@ class LoScore {
   | ARRAYS
   |~~~~~~~~~~
   * */
+
   uniq(array) {
-    // YOUR CODE HERE
+    let result = [];
+    let test = false;
+    for (let i = 0; i < array.length; i++) {
+      for (let j = 0; j < result.length; j++) {
+        if (array[i] === result[j]) {
+          test = true;
+        }
+      }
+      if (test === false) {
+        result.push(array[i]);
+      }
+      test = false;
+    }
+    return result;
   }
 
   /**
@@ -30,7 +44,9 @@ class LoScore {
   }
 
   map(collection, iteratee) {
-    // YOUR CODE HERE
+    let result = [];
+    this.each(collection, (val) => result.push(iteratee(val)));
+    return result;
   }
 
   filter(collection, test) {

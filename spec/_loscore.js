@@ -294,460 +294,460 @@ describe("LoScore", () => {
       });
     });
 
-    describe("filter", () => {
-      beforeEach(() => {
-        spy(_, "each");
-      });
-
-      afterEach(() => {
-        _.each.restore();
-      });
-
-      it("should not use native methods", () => {
-        _.filter([1, 2, 3, 4], isEven);
-        expect(spyReport()).to.be.false;
-      });
-
-      it("should return all even numbers in an array", () => {
-        const evens = _.filter([1, 2, 3, 4, 5, 6], isEven);
-        expect(evens).to.eql([2, 4, 6]);
-      });
-
-      it("should return all odd numbers in an array", () => {
-        const odds = _.filter([1, 2, 3, 4, 5, 6], isOdd);
-        expect(odds).to.eql([1, 3, 5]);
-      });
-
-      it("should use each in its solution", () => {
-        _.filter([1, 2, 3], isEven);
-        expect(_.each.called).to.be.true;
-      });
-
-      it("should produce a brand new array", () => {
-        const numbers = [1, 2, 3, 4, 5, 6];
-        const evens = _.filter(numbers, isOdd);
-        expect(evens).not.to.eql(numbers);
-      });
-    });
-
-    describe("reject", () => {
-      beforeEach(() => {
-        spy(_, "filter");
-      });
-
-      afterEach(() => {
-        _.filter.restore();
-      });
-
-      it("should not use native methods", () => {
-        _.reject([1, 2, 3, 4], isEven);
-        expect(spyReport()).to.be.false;
-      });
-
-      it("should reject all even numbers", () => {
-        const odds = _.reject([1, 2, 3, 4, 5, 6], isEven);
-        expect(odds).to.eql([1, 3, 5]);
-      });
-
-      it("should reject all odd numbers", () => {
-        const evens = _.reject([1, 2, 3, 4, 5, 6], isOdd);
-        expect(evens).to.eql([2, 4, 6]);
-      });
-
-      it("should use filter in its solution", () => {
-        _.reject([1, 2, 3], isEven);
-        expect(_.filter.called).to.be.true;
-      });
-
-      it("should produce a brand new array", () => {
-        const numbers = [1, 2, 3, 4, 5, 6];
-        const odds = _.reject(numbers, isOdd);
-        expect(odds).not.to.eql(numbers);
-      });
-    });
-
-    describe("reduce", () => {
-      beforeEach(() => {
-        spy(_, "each");
-      });
-
-      afterEach(() => {
-        _.each.restore();
-      });
-
-      it("should not use native methods", () => {
-        _.reduce([1, 2, 3, 4], (memo, item) => {
-          return item;
-        });
-        expect(spyReport()).to.be.false;
-      });
-
-      it("should return one value", () => {
-        const result = _.reduce([1, 2, 3], (memo, item) => {
-          return item;
-        });
-
-        expect(result).to.not.be.undefined;
-      });
-
-      it("should not mutate the original array", () => {
-        const input = [1, 2, 3, 4, 5];
-        _.reduce(input, (memo, item) => {
-          return item;
-        });
-
-        expect(input).to.eql([1, 2, 3, 4, 5]);
-      });
-
-      it("should call the iterator function with arguments memo and item in that order", () => {
-        let givenMemo, givenItem;
-        _.reduce(
-          ["item"],
-          (memo, item) => {
-            givenMemo = memo;
-            givenItem = item;
-          },
-          "memo"
-        );
-
-        expect(givenMemo).to.eql("memo");
-        expect(givenItem).to.eql("item");
-      });
-
-      it("should pass in items from left to right through iterator", () => {
-        const orderedResult = [];
-
-        _.reduce(
-          [1, 2, 3, 4],
-          (memo, item) => {
-            orderedResult.push(item);
-            return memo;
-          },
-          10
-        );
-
-        expect(orderedResult).to.eql([1, 2, 3, 4]);
-      });
-
-      it("should call iterator even if iterator returns undefined", () => {
-        let callCount = 0;
-        const returnFalsy = (total, item) => {
-          callCount++;
-          if (callCount === 1) {
-            return undefined;
-          }
-          return item + 1;
-        };
-
-        const total = _.reduce([1, 1, 2], returnFalsy);
-        expect(total).to.eql(3);
-      });
-
-      it("should pass every item of the array through the iterator if a memo is passed in", () => {
-        const result = _.reduce(
-          [1, 2, 3],
-          (memo, item) => {
-            return memo - item;
-          },
-          10
-        );
-
-        expect(result).to.eql(4);
-      });
-
-      it("should accept falsy values as a valid memo", () => {
-        const result = _.reduce(
-          [1, 2, 3],
-          (memo, item) => {
-            return memo * item;
-          },
-          0
-        );
-
-        expect(result).to.eql(0);
-      });
-
-      it("should set memo to be first item of the array if no memo is given", () => {
-        const result = _.reduce([1, 2, 3], _.identity);
-
-        expect(result).to.eql(1);
-      });
-
-      it("should pass the second item of the array into the iterator first if no memo is given", () => {
-        const result = _.reduce([3, 2, 1], (memo, item) => {
-          return memo - item;
-        });
-
-        expect(result).to.eql(0);
-      });
-
-      it("should use _.each in the solution", () => {
-        _.reduce([3, 2, 1], _.identity);
-        expect(_.each.called).to.be.true;
-      });
-    });
-
-    describe("every", () => {
-      beforeEach(() => {
-        spy(_, "reduce");
-      });
-
-      afterEach(() => {
-        _.reduce.restore();
-      });
-
-      it("should not use native methods", () => {
-        _.every([1, 2, 3, 4], _.identity);
-        expect(spyReport()).to.be.false;
-      });
-
-      it("should use _.reduce", () => {
-        _.every([1, 2, 3], _.identity);
-      });
-
-      it("should return true if every value passes test", () => {
-        const array = [1, 2, 3, 4, 5];
-        const test = (number) => number < 6;
-        expect(_.every(array, test)).to.be.true;
-      });
-
-      it("should return false if something does not pass", () => {
-        const array = [1, 2, 3, 4, 5];
-        const test = (number) => !(number === 3);
-        expect(_.every(array, test)).to.be.false;
-      });
-
-      it("should pass by default for an empty collection", () => {
-        expect(_.every([], _.identity)).to.be.true;
-      });
-
-      it("passes for a collection of all-truthy results", () => {
-        expect(_.every([true, {}, 1], _.identity)).to.be.true;
-      });
-
-      it("fails for a collection of all-falsy results", () => {
-        expect(_.every([null, 0, undefined], _.identity)).to.be.false;
-      });
-
-      it("treats each item as as a callback result when no callback is provided", () => {
-        expect(_.every([true, true, true])).to.be.true;
-      });
-
-      it("works when provded a collection containing undefined values", () => {
-        expect(_.every([undefined, undefined, undefined], _.identity)).to.be
-          .false;
-      });
-    });
-  });
-
-  describe("Objects", () => {
-    beforeEach(() => {
-      spyOnNativeMethods();
-    });
-
-    afterEach(() => {
-      releaseSpies();
-    });
-    describe("extend", () => {
-      beforeEach(() => {
-        spy(_, "each");
-      });
-
-      afterEach(() => {
-        _.each.restore();
-      });
-
-      it("should not use native methods", () => {
-        _.extend({}, {});
-        expect(spyReport()).to.be.false;
-      });
-
-      it("should use each", () => {
-        _.extend({}, {});
-        expect(_.each.called).to.be.true;
-      });
-
-      it("should shallowly copy one object to another", () => {
-        const objA = {
-          name: "moe",
-        };
-        const objB = {
-          age: 50,
-          favoriteThings: [
-            "raindrops on roses",
-            "whiskers on kittens",
-            "bright copper kettles",
-            "warm woolen mittens",
-            "brown paper packages tied up with strings",
-          ],
-        };
-        // Extend objA to have all of objB's properties.
-        const extendedObjA = _.extend(objA, objB);
-        expect(extendedObjA).to.eql({
-          name: "moe",
-          age: 50,
-          favoriteThings: [
-            "raindrops on roses",
-            "whiskers on kittens",
-            "bright copper kettles",
-            "warm woolen mittens",
-            "brown paper packages tied up with strings",
-          ],
-        });
-
-        // Manipulate favoriteThings in objB's reference and expect the result to appear in extendedObjA's reference.
-        objB.favoriteThings.pop();
-        expect(extendedObjA.favoriteThings).to.eql(objB.favoriteThings);
-
-        expect(_.extend({}, objA).age).to.eql(50);
-      });
-
-      it("should return the first argument", () => {
-        const objA = {};
-        const objB = {};
-        expect(_.extend(objA, objB)).to.eql(objA);
-      });
-
-      it("should override properties found in the source", () => {
-        const objA = {
-          name: "moe",
-        };
-        const objB = {
-          name: "joe",
-        };
-        expect(_.extend(objA, objB).name).to.eql("joe");
-      });
-
-      it("should use the last source property in case of conflict", () => {
-        const objA = {
-          name: "moe",
-        };
-        const objB = {
-          name: "joe",
-        };
-        const objC = {
-          name: "yan",
-        };
-        expect(_.extend(objA, objB, objC).name).to.eql("yan");
-      });
-    });
-  });
-
-  describe("Functions", () => {
-    beforeEach(() => {
-      spyOnNativeMethods();
-    });
-
-    afterEach(() => {
-      releaseSpies();
-    });
-    describe("once", () => {
-      it("should not use native methods", () => {
-        _.once(() => {});
-        expect(spyReport()).to.be.false;
-      });
-
-      it("should execute the given function only once", () => {
-        let num = 0;
-        const increment = _.once(() => {
-          num += 1;
-        });
-        increment();
-        increment();
-        increment();
-        expect(num).to.eql(1);
-      });
-
-      it("should return the previously returned value if a function has been called before", () => {
-        const getNumber = _.once((n) => ++n);
-        const initialNumber = getNumber(0);
-        const secondNumber = getNumber(99);
-        expect(secondNumber).to.eql(initialNumber);
-      });
-    });
-
-    describe("memoize", () => {
-      it("should not use native methods", () => {
-        _.memoize(() => {});
-        expect(spyReport()).to.be.false;
-      });
-
-      let fib, memoizedFib;
-      beforeEach(() => {
-        fib = (n) => {
-          if (n < 2) {
-            return n;
-          }
-          return fib(n - 1) + fib(n - 2);
-        };
-        memoizedFib = _.memoize(fib);
-      });
-
-      it("should create memoized functions that produce the same result when called with the same arguments", () => {
-        expect(memoizedFib(8)).to.eql(fib(8));
-      });
-
-      it("should give different results for different arguments", () => {
-        expect(memoizedFib(11)).to.eql(89);
-        expect(memoizedFib(8)).to.eql(21);
-      });
-
-      it("should not run the same function twice for a given argument", () => {
-        const count = {};
-        const foo = (n) => {
-          count[n] = count[n] + 1 || 1;
-          return n;
-        };
-        const memoizedFoo = _.memoize(foo);
-        memoizedFoo(2);
-        memoizedFoo(2);
-        expect(count[2]).to.eql(1);
-      });
-
-      it("should be able to handle more than one argument", () => {
-        let key;
-        const count = {};
-        const foo = function(a, b) {
-          key = JSON.stringify([a, b]);
-          count[key] = count[key] + 1 || 1;
-          return a + b;
-        };
-        const memoizedFoo = _.memoize(foo);
-        memoizedFoo(1, 2);
-        memoizedFoo(1, 2);
-        expect(count[key]).to.eql(1);
-      });
-    });
-
-    describe("invoke", () => {
-      it("should not use native methods", () => {
-        _.invoke([1, 2, 3], () => {});
-        expect(spyReport()).to.be.false;
-      });
-
-      let array, arrayOfStrings;
-
-      beforeEach(() => {
-        array = [[5, 1, 7], [3, 2, 1]];
-        arrayOfStrings = ["yan", "kani"];
-      });
-
-      it("should be able to invoke methods on values and return in an array", () => {
-        const sorted = _.invoke(array, "sort");
-        expect(sorted).to.eql([[1, 5, 7], [1, 2, 3]]);
-        expect(_.invoke(arrayOfStrings, "toUpperCase")).to.eql(["YAN", "KANI"]);
-      });
-
-      it("should be able to take a function", () => {
-        const reverse = function() {
-          return this.split("")
-            .reverse()
-            .join("");
-        };
-
-        const reversedStrings = _.invoke(["yan", "fan"], reverse);
-        expect(reversedStrings).to.eql(["nay", "naf"]);
-      });
-    });
+    //   describe("filter", () => {
+    //     beforeEach(() => {
+    //       spy(_, "each");
+    //     });
+
+    //     afterEach(() => {
+    //       _.each.restore();
+    //     });
+
+    //     it("should not use native methods", () => {
+    //       _.filter([1, 2, 3, 4], isEven);
+    //       expect(spyReport()).to.be.false;
+    //     });
+
+    //     it("should return all even numbers in an array", () => {
+    //       const evens = _.filter([1, 2, 3, 4, 5, 6], isEven);
+    //       expect(evens).to.eql([2, 4, 6]);
+    //     });
+
+    //     it("should return all odd numbers in an array", () => {
+    //       const odds = _.filter([1, 2, 3, 4, 5, 6], isOdd);
+    //       expect(odds).to.eql([1, 3, 5]);
+    //     });
+
+    //     it("should use each in its solution", () => {
+    //       _.filter([1, 2, 3], isEven);
+    //       expect(_.each.called).to.be.true;
+    //     });
+
+    //     it("should produce a brand new array", () => {
+    //       const numbers = [1, 2, 3, 4, 5, 6];
+    //       const evens = _.filter(numbers, isOdd);
+    //       expect(evens).not.to.eql(numbers);
+    //     });
+    //   });
+
+    //   describe("reject", () => {
+    //     beforeEach(() => {
+    //       spy(_, "filter");
+    //     });
+
+    //     afterEach(() => {
+    //       _.filter.restore();
+    //     });
+
+    //     it("should not use native methods", () => {
+    //       _.reject([1, 2, 3, 4], isEven);
+    //       expect(spyReport()).to.be.false;
+    //     });
+
+    //     it("should reject all even numbers", () => {
+    //       const odds = _.reject([1, 2, 3, 4, 5, 6], isEven);
+    //       expect(odds).to.eql([1, 3, 5]);
+    //     });
+
+    //     it("should reject all odd numbers", () => {
+    //       const evens = _.reject([1, 2, 3, 4, 5, 6], isOdd);
+    //       expect(evens).to.eql([2, 4, 6]);
+    //     });
+
+    //     it("should use filter in its solution", () => {
+    //       _.reject([1, 2, 3], isEven);
+    //       expect(_.filter.called).to.be.true;
+    //     });
+
+    //     it("should produce a brand new array", () => {
+    //       const numbers = [1, 2, 3, 4, 5, 6];
+    //       const odds = _.reject(numbers, isOdd);
+    //       expect(odds).not.to.eql(numbers);
+    //     });
+    //   });
+
+    //   describe("reduce", () => {
+    //     beforeEach(() => {
+    //       spy(_, "each");
+    //     });
+
+    //     afterEach(() => {
+    //       _.each.restore();
+    //     });
+
+    //     it("should not use native methods", () => {
+    //       _.reduce([1, 2, 3, 4], (memo, item) => {
+    //         return item;
+    //       });
+    //       expect(spyReport()).to.be.false;
+    //     });
+
+    //     it("should return one value", () => {
+    //       const result = _.reduce([1, 2, 3], (memo, item) => {
+    //         return item;
+    //       });
+
+    //       expect(result).to.not.be.undefined;
+    //     });
+
+    //     it("should not mutate the original array", () => {
+    //       const input = [1, 2, 3, 4, 5];
+    //       _.reduce(input, (memo, item) => {
+    //         return item;
+    //       });
+
+    //       expect(input).to.eql([1, 2, 3, 4, 5]);
+    //     });
+
+    //     it("should call the iterator function with arguments memo and item in that order", () => {
+    //       let givenMemo, givenItem;
+    //       _.reduce(
+    //         ["item"],
+    //         (memo, item) => {
+    //           givenMemo = memo;
+    //           givenItem = item;
+    //         },
+    //         "memo"
+    //       );
+
+    //       expect(givenMemo).to.eql("memo");
+    //       expect(givenItem).to.eql("item");
+    //     });
+
+    //     it("should pass in items from left to right through iterator", () => {
+    //       const orderedResult = [];
+
+    //       _.reduce(
+    //         [1, 2, 3, 4],
+    //         (memo, item) => {
+    //           orderedResult.push(item);
+    //           return memo;
+    //         },
+    //         10
+    //       );
+
+    //       expect(orderedResult).to.eql([1, 2, 3, 4]);
+    //     });
+
+    //     it("should call iterator even if iterator returns undefined", () => {
+    //       let callCount = 0;
+    //       const returnFalsy = (total, item) => {
+    //         callCount++;
+    //         if (callCount === 1) {
+    //           return undefined;
+    //         }
+    //         return item + 1;
+    //       };
+
+    //       const total = _.reduce([1, 1, 2], returnFalsy);
+    //       expect(total).to.eql(3);
+    //     });
+
+    //     it("should pass every item of the array through the iterator if a memo is passed in", () => {
+    //       const result = _.reduce(
+    //         [1, 2, 3],
+    //         (memo, item) => {
+    //           return memo - item;
+    //         },
+    //         10
+    //       );
+
+    //       expect(result).to.eql(4);
+    //     });
+
+    //     it("should accept falsy values as a valid memo", () => {
+    //       const result = _.reduce(
+    //         [1, 2, 3],
+    //         (memo, item) => {
+    //           return memo * item;
+    //         },
+    //         0
+    //       );
+
+    //       expect(result).to.eql(0);
+    //     });
+
+    //     it("should set memo to be first item of the array if no memo is given", () => {
+    //       const result = _.reduce([1, 2, 3], _.identity);
+
+    //       expect(result).to.eql(1);
+    //     });
+
+    //     it("should pass the second item of the array into the iterator first if no memo is given", () => {
+    //       const result = _.reduce([3, 2, 1], (memo, item) => {
+    //         return memo - item;
+    //       });
+
+    //       expect(result).to.eql(0);
+    //     });
+
+    //     it("should use _.each in the solution", () => {
+    //       _.reduce([3, 2, 1], _.identity);
+    //       expect(_.each.called).to.be.true;
+    //     });
+    //   });
+
+    //   describe("every", () => {
+    //     beforeEach(() => {
+    //       spy(_, "reduce");
+    //     });
+
+    //     afterEach(() => {
+    //       _.reduce.restore();
+    //     });
+
+    //     it("should not use native methods", () => {
+    //       _.every([1, 2, 3, 4], _.identity);
+    //       expect(spyReport()).to.be.false;
+    //     });
+
+    //     it("should use _.reduce", () => {
+    //       _.every([1, 2, 3], _.identity);
+    //     });
+
+    //     it("should return true if every value passes test", () => {
+    //       const array = [1, 2, 3, 4, 5];
+    //       const test = (number) => number < 6;
+    //       expect(_.every(array, test)).to.be.true;
+    //     });
+
+    //     it("should return false if something does not pass", () => {
+    //       const array = [1, 2, 3, 4, 5];
+    //       const test = (number) => !(number === 3);
+    //       expect(_.every(array, test)).to.be.false;
+    //     });
+
+    //     it("should pass by default for an empty collection", () => {
+    //       expect(_.every([], _.identity)).to.be.true;
+    //     });
+
+    //     it("passes for a collection of all-truthy results", () => {
+    //       expect(_.every([true, {}, 1], _.identity)).to.be.true;
+    //     });
+
+    //     it("fails for a collection of all-falsy results", () => {
+    //       expect(_.every([null, 0, undefined], _.identity)).to.be.false;
+    //     });
+
+    //     it("treats each item as as a callback result when no callback is provided", () => {
+    //       expect(_.every([true, true, true])).to.be.true;
+    //     });
+
+    //     it("works when provded a collection containing undefined values", () => {
+    //       expect(_.every([undefined, undefined, undefined], _.identity)).to.be
+    //         .false;
+    //     });
+    //   });
+    // });
+
+    // describe("Objects", () => {
+    //   beforeEach(() => {
+    //     spyOnNativeMethods();
+    //   });
+
+    //   afterEach(() => {
+    //     releaseSpies();
+    //   });
+    //   describe("extend", () => {
+    //     beforeEach(() => {
+    //       spy(_, "each");
+    //     });
+
+    //     afterEach(() => {
+    //       _.each.restore();
+    //     });
+
+    //     it("should not use native methods", () => {
+    //       _.extend({}, {});
+    //       expect(spyReport()).to.be.false;
+    //     });
+
+    //     it("should use each", () => {
+    //       _.extend({}, {});
+    //       expect(_.each.called).to.be.true;
+    //     });
+
+    //     it("should shallowly copy one object to another", () => {
+    //       const objA = {
+    //         name: "moe",
+    //       };
+    //       const objB = {
+    //         age: 50,
+    //         favoriteThings: [
+    //           "raindrops on roses",
+    //           "whiskers on kittens",
+    //           "bright copper kettles",
+    //           "warm woolen mittens",
+    //           "brown paper packages tied up with strings",
+    //         ],
+    //       };
+    //       // Extend objA to have all of objB's properties.
+    //       const extendedObjA = _.extend(objA, objB);
+    //       expect(extendedObjA).to.eql({
+    //         name: "moe",
+    //         age: 50,
+    //         favoriteThings: [
+    //           "raindrops on roses",
+    //           "whiskers on kittens",
+    //           "bright copper kettles",
+    //           "warm woolen mittens",
+    //           "brown paper packages tied up with strings",
+    //         ],
+    //       });
+
+    //       // Manipulate favoriteThings in objB's reference and expect the result to appear in extendedObjA's reference.
+    //       objB.favoriteThings.pop();
+    //       expect(extendedObjA.favoriteThings).to.eql(objB.favoriteThings);
+
+    //       expect(_.extend({}, objA).age).to.eql(50);
+    //     });
+
+    //     it("should return the first argument", () => {
+    //       const objA = {};
+    //       const objB = {};
+    //       expect(_.extend(objA, objB)).to.eql(objA);
+    //     });
+
+    //     it("should override properties found in the source", () => {
+    //       const objA = {
+    //         name: "moe",
+    //       };
+    //       const objB = {
+    //         name: "joe",
+    //       };
+    //       expect(_.extend(objA, objB).name).to.eql("joe");
+    //     });
+
+    //     it("should use the last source property in case of conflict", () => {
+    //       const objA = {
+    //         name: "moe",
+    //       };
+    //       const objB = {
+    //         name: "joe",
+    //       };
+    //       const objC = {
+    //         name: "yan",
+    //       };
+    //       expect(_.extend(objA, objB, objC).name).to.eql("yan");
+    //     });
+    //   });
+    // });
+
+    // describe("Functions", () => {
+    //   beforeEach(() => {
+    //     spyOnNativeMethods();
+    //   });
+
+    //   afterEach(() => {
+    //     releaseSpies();
+    //   });
+    //   describe("once", () => {
+    //     it("should not use native methods", () => {
+    //       _.once(() => {});
+    //       expect(spyReport()).to.be.false;
+    //     });
+
+    //     it("should execute the given function only once", () => {
+    //       let num = 0;
+    //       const increment = _.once(() => {
+    //         num += 1;
+    //       });
+    //       increment();
+    //       increment();
+    //       increment();
+    //       expect(num).to.eql(1);
+    //     });
+
+    //     it("should return the previously returned value if a function has been called before", () => {
+    //       const getNumber = _.once((n) => ++n);
+    //       const initialNumber = getNumber(0);
+    //       const secondNumber = getNumber(99);
+    //       expect(secondNumber).to.eql(initialNumber);
+    //     });
+    //   });
+
+    //   describe("memoize", () => {
+    //     it("should not use native methods", () => {
+    //       _.memoize(() => {});
+    //       expect(spyReport()).to.be.false;
+    //     });
+
+    //     let fib, memoizedFib;
+    //     beforeEach(() => {
+    //       fib = (n) => {
+    //         if (n < 2) {
+    //           return n;
+    //         }
+    //         return fib(n - 1) + fib(n - 2);
+    //       };
+    //       memoizedFib = _.memoize(fib);
+    //     });
+
+    //     it("should create memoized functions that produce the same result when called with the same arguments", () => {
+    //       expect(memoizedFib(8)).to.eql(fib(8));
+    //     });
+
+    //     it("should give different results for different arguments", () => {
+    //       expect(memoizedFib(11)).to.eql(89);
+    //       expect(memoizedFib(8)).to.eql(21);
+    //     });
+
+    //     it("should not run the same function twice for a given argument", () => {
+    //       const count = {};
+    //       const foo = (n) => {
+    //         count[n] = count[n] + 1 || 1;
+    //         return n;
+    //       };
+    //       const memoizedFoo = _.memoize(foo);
+    //       memoizedFoo(2);
+    //       memoizedFoo(2);
+    //       expect(count[2]).to.eql(1);
+    //     });
+
+    //     it("should be able to handle more than one argument", () => {
+    //       let key;
+    //       const count = {};
+    //       const foo = function(a, b) {
+    //         key = JSON.stringify([a, b]);
+    //         count[key] = count[key] + 1 || 1;
+    //         return a + b;
+    //       };
+    //       const memoizedFoo = _.memoize(foo);
+    //       memoizedFoo(1, 2);
+    //       memoizedFoo(1, 2);
+    //       expect(count[key]).to.eql(1);
+    //     });
+    //   });
+
+    //   describe("invoke", () => {
+    //     it("should not use native methods", () => {
+    //       _.invoke([1, 2, 3], () => {});
+    //       expect(spyReport()).to.be.false;
+    //     });
+
+    //     let array, arrayOfStrings;
+
+    //     beforeEach(() => {
+    //       array = [[5, 1, 7], [3, 2, 1]];
+    //       arrayOfStrings = ["yan", "kani"];
+    //     });
+
+    //     it("should be able to invoke methods on values and return in an array", () => {
+    //       const sorted = _.invoke(array, "sort");
+    //       expect(sorted).to.eql([[1, 5, 7], [1, 2, 3]]);
+    //       expect(_.invoke(arrayOfStrings, "toUpperCase")).to.eql(["YAN", "KANI"]);
+    //     });
+
+    //     it("should be able to take a function", () => {
+    //       const reverse = function() {
+    //         return this.split("")
+    //           .reverse()
+    //           .join("");
+    //       };
+
+    //       const reversedStrings = _.invoke(["yan", "fan"], reverse);
+    //       expect(reversedStrings).to.eql(["nay", "naf"]);
+    //     });
+    //   });
   });
 });
