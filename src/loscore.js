@@ -55,14 +55,39 @@ class LoScore {
     return result;
   }
 
-  reject(collection, test) {}
-
-  reduce(collection, iterator, accumulator) {
-    // YOUR CODE HERE
+  reject(collection, test) {
+    let result = [];
+    this.filter(collection, (val) => {
+      if (!test(val)) {
+        result.push(val);
+      }
+    });
+    return result;
   }
 
-  every() {
-    // YOUR CODE HERE
+  reduce(collection, iterator, accumulator) {
+    let result = accumulator;
+    if (typeof accumulator === "undefined") {
+      result = collection[0];
+      collection = collection.slice(1);
+    }
+    this.each(collection, (val) => {
+      result = iterator(result, val);
+    });
+    return result;
+  }
+
+  every(collection, iterator) {
+    //if previous result is true check the next value is true or false using reduce
+    return this.reduce(
+      collection,
+      (val) => {
+        if (!!iterator(val) === false) {
+          return false;
+        }
+      },
+      true
+    );
   }
 
   /**
