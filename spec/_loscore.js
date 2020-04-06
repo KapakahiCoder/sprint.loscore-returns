@@ -538,216 +538,216 @@ describe("LoScore", () => {
           .false;
       });
     });
-    // });
+  });
 
-    // describe("Objects", () => {
-    //   beforeEach(() => {
-    //     spyOnNativeMethods();
-    //   });
+  describe("Objects", () => {
+    beforeEach(() => {
+      spyOnNativeMethods();
+    });
 
-    //   afterEach(() => {
-    //     releaseSpies();
-    //   });
-    //   describe("extend", () => {
-    //     beforeEach(() => {
-    //       spy(_, "each");
-    //     });
+    afterEach(() => {
+      releaseSpies();
+    });
+    describe("extend", () => {
+      beforeEach(() => {
+        spy(_, "each");
+      });
 
-    //     afterEach(() => {
-    //       _.each.restore();
-    //     });
+      afterEach(() => {
+        _.each.restore();
+      });
 
-    //     it("should not use native methods", () => {
-    //       _.extend({}, {});
-    //       expect(spyReport()).to.be.false;
-    //     });
+      it("should not use native methods", () => {
+        _.extend({}, {});
+        expect(spyReport()).to.be.false;
+      });
 
-    //     it("should use each", () => {
-    //       _.extend({}, {});
-    //       expect(_.each.called).to.be.true;
-    //     });
+      it("should use each", () => {
+        _.extend({}, {});
+        expect(_.each.called).to.be.true;
+      });
 
-    //     it("should shallowly copy one object to another", () => {
-    //       const objA = {
-    //         name: "moe",
-    //       };
-    //       const objB = {
-    //         age: 50,
-    //         favoriteThings: [
-    //           "raindrops on roses",
-    //           "whiskers on kittens",
-    //           "bright copper kettles",
-    //           "warm woolen mittens",
-    //           "brown paper packages tied up with strings",
-    //         ],
-    //       };
-    //       // Extend objA to have all of objB's properties.
-    //       const extendedObjA = _.extend(objA, objB);
-    //       expect(extendedObjA).to.eql({
-    //         name: "moe",
-    //         age: 50,
-    //         favoriteThings: [
-    //           "raindrops on roses",
-    //           "whiskers on kittens",
-    //           "bright copper kettles",
-    //           "warm woolen mittens",
-    //           "brown paper packages tied up with strings",
-    //         ],
-    //       });
+      it("should shallowly copy one object to another", () => {
+        const objA = {
+          name: "moe",
+        };
+        const objB = {
+          age: 50,
+          favoriteThings: [
+            "raindrops on roses",
+            "whiskers on kittens",
+            "bright copper kettles",
+            "warm woolen mittens",
+            "brown paper packages tied up with strings",
+          ],
+        };
+        // Extend objA to have all of objB's properties.
+        const extendedObjA = _.extend(objA, objB);
+        expect(extendedObjA).to.eql({
+          name: "moe",
+          age: 50,
+          favoriteThings: [
+            "raindrops on roses",
+            "whiskers on kittens",
+            "bright copper kettles",
+            "warm woolen mittens",
+            "brown paper packages tied up with strings",
+          ],
+        });
 
-    //       // Manipulate favoriteThings in objB's reference and expect the result to appear in extendedObjA's reference.
-    //       objB.favoriteThings.pop();
-    //       expect(extendedObjA.favoriteThings).to.eql(objB.favoriteThings);
+        // Manipulate favoriteThings in objB's reference and expect the result to appear in extendedObjA's reference.
+        objB.favoriteThings.pop();
+        expect(extendedObjA.favoriteThings).to.eql(objB.favoriteThings);
 
-    //       expect(_.extend({}, objA).age).to.eql(50);
-    //     });
+        expect(_.extend({}, objA).age).to.eql(50);
+      });
 
-    //     it("should return the first argument", () => {
-    //       const objA = {};
-    //       const objB = {};
-    //       expect(_.extend(objA, objB)).to.eql(objA);
-    //     });
+      it("should return the first argument", () => {
+        const objA = {};
+        const objB = {};
+        expect(_.extend(objA, objB)).to.eql(objA);
+      });
 
-    //     it("should override properties found in the source", () => {
-    //       const objA = {
-    //         name: "moe",
-    //       };
-    //       const objB = {
-    //         name: "joe",
-    //       };
-    //       expect(_.extend(objA, objB).name).to.eql("joe");
-    //     });
+      it("should override properties found in the source", () => {
+        const objA = {
+          name: "moe",
+        };
+        const objB = {
+          name: "joe",
+        };
+        expect(_.extend(objA, objB).name).to.eql("joe");
+      });
 
-    //     it("should use the last source property in case of conflict", () => {
-    //       const objA = {
-    //         name: "moe",
-    //       };
-    //       const objB = {
-    //         name: "joe",
-    //       };
-    //       const objC = {
-    //         name: "yan",
-    //       };
-    //       expect(_.extend(objA, objB, objC).name).to.eql("yan");
-    //     });
-    //   });
-    // });
+      it("should use the last source property in case of conflict", () => {
+        const objA = {
+          name: "moe",
+        };
+        const objB = {
+          name: "joe",
+        };
+        const objC = {
+          name: "yan",
+        };
+        expect(_.extend(objA, objB, objC).name).to.eql("yan");
+      });
+    });
+  });
 
-    // describe("Functions", () => {
-    //   beforeEach(() => {
-    //     spyOnNativeMethods();
-    //   });
+  describe("Functions", () => {
+    beforeEach(() => {
+      spyOnNativeMethods();
+    });
 
-    //   afterEach(() => {
-    //     releaseSpies();
-    //   });
-    //   describe("once", () => {
-    //     it("should not use native methods", () => {
-    //       _.once(() => {});
-    //       expect(spyReport()).to.be.false;
-    //     });
+    afterEach(() => {
+      releaseSpies();
+    });
+    describe("once", () => {
+      it("should not use native methods", () => {
+        _.once(() => {});
+        expect(spyReport()).to.be.false;
+      });
 
-    //     it("should execute the given function only once", () => {
-    //       let num = 0;
-    //       const increment = _.once(() => {
-    //         num += 1;
-    //       });
-    //       increment();
-    //       increment();
-    //       increment();
-    //       expect(num).to.eql(1);
-    //     });
+      it("should execute the given function only once", () => {
+        let num = 0;
+        const increment = _.once(() => {
+          num += 1;
+        });
+        increment();
+        increment();
+        increment();
+        expect(num).to.eql(1);
+      });
 
-    //     it("should return the previously returned value if a function has been called before", () => {
-    //       const getNumber = _.once((n) => ++n);
-    //       const initialNumber = getNumber(0);
-    //       const secondNumber = getNumber(99);
-    //       expect(secondNumber).to.eql(initialNumber);
-    //     });
-    //   });
+      it("should return the previously returned value if a function has been called before", () => {
+        const getNumber = _.once((n) => ++n);
+        const initialNumber = getNumber(0);
+        const secondNumber = getNumber(99);
+        expect(secondNumber).to.eql(initialNumber);
+      });
+    });
 
-    //   describe("memoize", () => {
-    //     it("should not use native methods", () => {
-    //       _.memoize(() => {});
-    //       expect(spyReport()).to.be.false;
-    //     });
+    describe("memoize", () => {
+      it("should not use native methods", () => {
+        _.memoize(() => {});
+        expect(spyReport()).to.be.false;
+      });
 
-    //     let fib, memoizedFib;
-    //     beforeEach(() => {
-    //       fib = (n) => {
-    //         if (n < 2) {
-    //           return n;
-    //         }
-    //         return fib(n - 1) + fib(n - 2);
-    //       };
-    //       memoizedFib = _.memoize(fib);
-    //     });
+      let fib, memoizedFib;
+      beforeEach(() => {
+        fib = (n) => {
+          if (n < 2) {
+            return n;
+          }
+          return fib(n - 1) + fib(n - 2);
+        };
+        memoizedFib = _.memoize(fib);
+      });
 
-    //     it("should create memoized functions that produce the same result when called with the same arguments", () => {
-    //       expect(memoizedFib(8)).to.eql(fib(8));
-    //     });
+      it("should create memoized functions that produce the same result when called with the same arguments", () => {
+        expect(memoizedFib(8)).to.eql(fib(8));
+      });
 
-    //     it("should give different results for different arguments", () => {
-    //       expect(memoizedFib(11)).to.eql(89);
-    //       expect(memoizedFib(8)).to.eql(21);
-    //     });
+      it("should give different results for different arguments", () => {
+        expect(memoizedFib(11)).to.eql(89);
+        expect(memoizedFib(8)).to.eql(21);
+      });
 
-    //     it("should not run the same function twice for a given argument", () => {
-    //       const count = {};
-    //       const foo = (n) => {
-    //         count[n] = count[n] + 1 || 1;
-    //         return n;
-    //       };
-    //       const memoizedFoo = _.memoize(foo);
-    //       memoizedFoo(2);
-    //       memoizedFoo(2);
-    //       expect(count[2]).to.eql(1);
-    //     });
+      it("should not run the same function twice for a given argument", () => {
+        const count = {};
+        const foo = (n) => {
+          count[n] = count[n] + 1 || 1;
+          return n;
+        };
+        const memoizedFoo = _.memoize(foo);
+        memoizedFoo(2);
+        memoizedFoo(2);
+        expect(count[2]).to.eql(1);
+      });
 
-    //     it("should be able to handle more than one argument", () => {
-    //       let key;
-    //       const count = {};
-    //       const foo = function(a, b) {
-    //         key = JSON.stringify([a, b]);
-    //         count[key] = count[key] + 1 || 1;
-    //         return a + b;
-    //       };
-    //       const memoizedFoo = _.memoize(foo);
-    //       memoizedFoo(1, 2);
-    //       memoizedFoo(1, 2);
-    //       expect(count[key]).to.eql(1);
-    //     });
-    //   });
+      it("should be able to handle more than one argument", () => {
+        let key;
+        const count = {};
+        const foo = function(a, b) {
+          key = JSON.stringify([a, b]);
+          count[key] = count[key] + 1 || 1;
+          return a + b;
+        };
+        const memoizedFoo = _.memoize(foo);
+        memoizedFoo(1, 2);
+        memoizedFoo(1, 2);
+        expect(count[key]).to.eql(1);
+      });
+    });
 
-    //   describe("invoke", () => {
-    //     it("should not use native methods", () => {
-    //       _.invoke([1, 2, 3], () => {});
-    //       expect(spyReport()).to.be.false;
-    //     });
+    describe("invoke", () => {
+      it("should not use native methods", () => {
+        _.invoke([1, 2, 3], () => {});
+        expect(spyReport()).to.be.false;
+      });
 
-    //     let array, arrayOfStrings;
+      let array, arrayOfStrings;
 
-    //     beforeEach(() => {
-    //       array = [[5, 1, 7], [3, 2, 1]];
-    //       arrayOfStrings = ["yan", "kani"];
-    //     });
+      beforeEach(() => {
+        array = [[5, 1, 7], [3, 2, 1]];
+        arrayOfStrings = ["yan", "kani"];
+      });
 
-    //     it("should be able to invoke methods on values and return in an array", () => {
-    //       const sorted = _.invoke(array, "sort");
-    //       expect(sorted).to.eql([[1, 5, 7], [1, 2, 3]]);
-    //       expect(_.invoke(arrayOfStrings, "toUpperCase")).to.eql(["YAN", "KANI"]);
-    //     });
+      it("should be able to invoke methods on values and return in an array", () => {
+        const sorted = _.invoke(array, "sort");
+        expect(sorted).to.eql([[1, 5, 7], [1, 2, 3]]);
+        expect(_.invoke(arrayOfStrings, "toUpperCase")).to.eql(["YAN", "KANI"]);
+      });
 
-    //     it("should be able to take a function", () => {
-    //       const reverse = function() {
-    //         return this.split("")
-    //           .reverse()
-    //           .join("");
-    //       };
+      it("should be able to take a function", () => {
+        const reverse = function() {
+          return this.split("")
+            .reverse()
+            .join("");
+        };
 
-    //       const reversedStrings = _.invoke(["yan", "fan"], reverse);
-    //       expect(reversedStrings).to.eql(["nay", "naf"]);
-    //     });
-    //   });
+        const reversedStrings = _.invoke(["yan", "fan"], reverse);
+        expect(reversedStrings).to.eql(["nay", "naf"]);
+      });
+    });
   });
 });

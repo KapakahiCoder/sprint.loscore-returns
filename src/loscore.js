@@ -78,13 +78,15 @@ class LoScore {
   }
 
   every(collection, iterator) {
-    //if previous result is true check the next value is true or false using reduce
+    if (typeof iterator === "undefined") {
+      return true;
+    }
     return this.reduce(
       collection,
-      (val) => {
-        if (!!iterator(val) === false) {
+      (acc, val) => {
+        if (!acc) {
           return false;
-        }
+        } else return iterator(val);
       },
       true
     );
@@ -94,8 +96,13 @@ class LoScore {
   | OBJECTS
   |~~~~~~~~~~
   * */
-  extend(obj) {
-    // YOUR CODE HERE
+  extend(objA, ...objB) {
+    for (let item of objB) {
+      this.each(item, (val, key) => {
+        objA[key] = val;
+      });
+    }
+    return objA;
   }
 
   /**
@@ -104,18 +111,45 @@ class LoScore {
   * */
 
   once(func) {
-    // YOUR CODE HERE
+    let wasCalled = false;
+    let result = 0;
+    return function() {
+      if (wasCalled === false) {
+        result = func();
+        wasCalled = true;
+      }
+      return result;
+    };
   }
 
   memoize(func) {
-    // YOUR CODE HERE
+    let cache = {};
+    return function(...args) {
+      if (cache[args]) {
+        return cache[args];
+      } else {
+        let val = func(args);
+        cache[args] = val;
+        return val;
+      }
+    };
   }
 
   invoke(collection, functionOrKey) {
-    // YOUR CODE HERE
+    let result = [];
+    if (typeof functionOrKey !== "function") {
+      this.each(collection, (val, index) => {
+        result.push(collection[index][functionOrKey].apply(val));
+      });
+    } else {
+      this.each(collection, (val) => {
+        result.push(functionOrKey.apply(val));
+      });
+    }
+    return result;
   }
 
-  /**
+  /**  
   | ADVANCED REQUIREMENTS
   |~~~~~~~~~~~~~
   * */
